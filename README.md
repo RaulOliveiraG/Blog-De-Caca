@@ -53,7 +53,7 @@ Configure o arquivo .env
 Baseie-se no .env.example para criar o seu.
 
 Rode as migrations do Prisma:
-
+npx prisma generate
 npx prisma migrate dev --name init
 Inicie o projeto:
 
