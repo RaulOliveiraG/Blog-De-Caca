@@ -15,24 +15,9 @@ app.get('/', async (req, res) => {
     res.send('Conexão com o banco de dados MySQL bem-sucedida!');
   } catch (error) {
     res.status(500).send('Erro ao conectar com o banco de dados.');
+    console.log(error)
   }
 });
-
-
-
-app.post('/user', async (req, res) => {
-  try {
-    const { email, name } = req.body;
-    const user = await prisma.user.create({
-      data: { email, name }
-    });
-    res.json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Erro ao criar usuário.');
-  }
-});
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
