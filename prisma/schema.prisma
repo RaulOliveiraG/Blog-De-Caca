@@ -8,9 +8,33 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String? @map("nome")
+  id              Int      @id @default(autoincrement()) // Chave primária auto-incrementada
+  nickname        String                                // Apelido do usuário
+  senha_hash      String                                // Hash da senha (bcrypt)
+  cpf             String   @unique                      // CPF único
+  nome            String                                // Nome completo
+  email           String   @unique                      // E-mail único
+  numero_telefone String?                               // Telefone (opcional)
+  data_cadastro   DateTime @default(now())              // Data de cadastro (agora)
+  foto_perfil     String?                               // URL da foto de perfil (opcional)
+  role            String   @default("user")             // Papel do usuário (user/admin)
+  
+   passwordResetTokens PasswordResetToken[]//Este usuário pode ter vários tokens de recuperação...
+   //relção inversa ao model de baixo
 
-  @@map("usuario")
+  @@map("usuario") // Mapeia o modelo User para a tabela "usuario" no banco
 }
+
+model PasswordResetToken {
+  id         Int      @id @default(autoincrement())
+  token      String   @unique
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])//esse token pertence apenas a um usuario
+  expiresAt  DateTime
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@map("password_reset_token")
+}
+
+//!!!!!!se alterar o esquema rode: npx prisma generate no terminal!!!!!!
