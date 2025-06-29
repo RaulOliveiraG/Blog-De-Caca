@@ -1,0 +1,66 @@
+.cadastro-container {
+  display: flex;
+  height: 100vh;
+}
+
+.cadastro-esquerda {
+  flex: 1;
+  background-color: #e8e8e8;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.cadastro-esquerda img {
+  max-height: 60%;
+}
+
+.cadastro-esquerda p {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.cadastro-direita {
+  flex: 1;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+}
+
+.cadastro-direita h2 {
+  color: #aa9800;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.cadastro-direita form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cadastro-direita input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.cadastro-direita button {
+  background-color: #060637;
+  color: white;
+  border: none;
+  padding: 12px;
+  margin-top: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.entrar {
+  margin-top: 20px;
+  font-size: 14px;
+}
