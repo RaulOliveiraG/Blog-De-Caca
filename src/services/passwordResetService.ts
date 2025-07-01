@@ -24,7 +24,7 @@ export async function requestPasswordReset(email: string, baseUrl: string) {
 
   // Monta link com o token...
   const link = `${baseUrl}/reset-password?token=${token}`;
-
+  
   // como enviar o email de verdade????
   console.log(`Link de redefinição de senha: ${link}`);//console com o link para testar...
 }

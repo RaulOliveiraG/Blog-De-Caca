@@ -12,6 +12,7 @@ interface CreateUserDTO {//define quais serão os dados para criar um usuario...
   foto_perfil?: string;
 }
 
+
 export async function createUser(data: CreateUserDTO) {
   // Verifica se email já existe
   const existingEmail = await prisma.user.findUnique({
@@ -50,8 +51,24 @@ export async function createUser(data: CreateUserDTO) {
       role: userCount === 0 ? 'admin' : 'user'//se for o primeiro vira admin, se nao for vira user
     }
   });
-
   // Não retorna senha_hash
   const { senha_hash: _, ...userWithoutPassword } = usuario;//remove o campo senha_hash do return abaixo, por segurança....
   return userWithoutPassword;
+}
+
+
+export async function getAllUsersService() {
+  return prisma.user.findMany({
+    select: {
+      id: true,
+      nickname: true,
+      cpf: true,
+      nome: true,
+      email: true,
+      numero_telefone: true,
+      data_cadastro: true,
+      foto_perfil: true,
+      role: true,
+    },
+  });
 }

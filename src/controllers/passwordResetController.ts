@@ -13,7 +13,7 @@ export async function requestReset(req: Request, res: Response) {
     const { token, newPassword } = req.body;
 
     //verifica se token e newPassword estão preenchidos
-    if (!token || !newPassword) {.
+    if (!token || !newPassword) {
         return res.status(400).json({ error: 'Token e nova senha são obrigatórios.' });
   }
 
