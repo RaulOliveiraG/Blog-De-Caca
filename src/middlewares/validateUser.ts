@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from 'express';
 export function validateUser(req: Request, res: Response, next: NextFunction) {
   const { nickname, senha, cpf, nome, email } = req.body;//"divide" a requisição
 
-
   if (!nickname || !senha || !cpf || !nome || !email) {//verifica se o que é obrigatorio está preenchido
     return res.status(400).json({ error: 'Todos os campos obrigatórios devem ser preenchidos.' });
   }
@@ -17,7 +16,7 @@ const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
   // email simples
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
    // valida o formato de email
-  if (!emailRegex.test(email)) {
+  if (!   emailRegex.test(email)) {
     return res.status(400).json({ error: 'E-mail inválido.' });
   }
   // Se passar de todas as validações, chama o próximo middleware ou vai pros controllers
