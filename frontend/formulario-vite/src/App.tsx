@@ -1,5 +1,5 @@
 import React from 'react';
-import Cadastro from "./components/Cadastro";
+import Cadastro from "./pages/Cadastro";
 
 const App: React.FC = () => {
   return <Cadastro />;
