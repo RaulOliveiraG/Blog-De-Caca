@@ -1,14 +1,11 @@
 import { Router } from 'express';
 import { registerUser } from '../controllers/userController';
 import { validateUser } from '../middlewares/validateUser';
-<<<<<<< Updated upstream
 import { onlyAdmin } from '../middlewares/authAdmin';
 import { getAllUsers } from '../controllers/userController';
-=======
 import { validateLogin } from '../middlewares/validateLogin';
 import { LoginUser } from '../controllers/LoginUser';
-import { LimitadorTentativasLogin } from '../middlewares/LoginRateLimiter'
->>>>>>> Stashed changes
+import { LimitadorTentativasLogin } from '../middlewares/LoginRateLimiter';
 
 const router = Router();
 
