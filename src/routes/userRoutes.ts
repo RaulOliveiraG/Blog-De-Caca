@@ -1,14 +1,11 @@
 import { Router } from 'express';
 import { registerUser } from '../controllers/userController';
 import { validateUser } from '../middlewares/validateUser';
-<<<<<<< Updated upstream
 import { onlyAdmin } from '../middlewares/authAdmin';
 import { getAllUsers } from '../controllers/userController';
-=======
 import { validateLogin } from '../middlewares/validateLogin';
 import { LoginUser } from '../controllers/LoginUser';
 import { LimitadorTentativasLogin } from '../middlewares/LoginRateLimiter'
->>>>>>> Stashed changes
 
 const router = Router();
 
@@ -111,5 +108,5 @@ router.get('/usuarios', onlyAdmin, getAllUsers);
  *       400:
  *         description: Usuário já está logado. Faça logout antes de tentar novamente.
  */
-router.post('/login', validateLogin, LimitadorTentativasLogin, LoginUser);
+router.post('/login', LimitadorTentativasLogin, validateLogin, LoginUser);
 export default router;
