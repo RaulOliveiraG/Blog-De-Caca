@@ -39,7 +39,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 app.get('/', async (req, res) => {
   try {
     await prisma.user.findMany();
-    res.send('Conexão com o banco de dados MySQL bem-sucedida!');
+    res.send('Conexão com o banco de dados postgresql bem-sucedida!');
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao conectar com o banco de dados.');

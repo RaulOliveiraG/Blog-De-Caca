@@ -1,7 +1,7 @@
 # Hunting Blog
 
 Bem-vindo ao **Hunting Blog**!  
-Um blog dedicado à comunidade de caça, onde usuários podem compartilhar experiências, dicas, histórias e interagir de diversas formas. Desenvolvido com **Node.js**, **TypeScript**, **Express** e **Prisma**, com persistência de dados em **MySQL**.
+Um blog dedicado à comunidade de caça, onde usuários podem compartilhar experiências, dicas, histórias e interagir de diversas formas. Desenvolvido com **Node.js**, **TypeScript**, **Express** e **Prisma**, com persistência de dados em **postgresql**.
 
 ---
 
@@ -32,7 +32,7 @@ Um blog dedicado à comunidade de caça, onde usuários podem compartilhar exper
 
 ## 🚀 Tecnologias Utilizadas
 
-| [![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)](https://nodejs.org/) | [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) | [![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white)](https://expressjs.com/) | [![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/) | [![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/) |
+| [![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)](https://nodejs.org/) | [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) | [![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white)](https://expressjs.com/) | [![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/) | [![postgresql](https://img.shields.io/badge/postgresql-4479A1?logo=postgresql&logoColor=white)](https://www.postgresql.com/) |
 |---|---|---|---|---|
 
 - **MVC (Models, Views, Controllers)**
