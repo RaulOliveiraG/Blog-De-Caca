@@ -3,6 +3,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
 import Cadastro from "../pages/Cadastro";
+import Home from "../pages/Home"; 
+
 
 const App: React.FC = () => {
   return (
@@ -10,6 +12,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+         <Route path="/home" element={<Home />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
