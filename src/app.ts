@@ -10,7 +10,6 @@ import passwordResetRoutes from './routes/passwordResetRoutes';
 
 dotenv.config();
 
-// CORREÇÃO APLICADA AQUI:
 const swaggerSpec = require('./docs/swagger'); 
 const app = express();
 
