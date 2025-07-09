@@ -4,8 +4,28 @@ import Footer from "../src/components/Footer";
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<
-    { id: number; titulo: string; resumo: string; imagem: string }[]
+    { id: number; titulo: string; descricao: string; imagem: string }[]
   >([]);
+  const [showModal, setShowModal] = useState(false);
+  const [novoPost, setNovoPost] = useState({
+    titulo: "",
+    descricao: "",
+    imagem: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setNovoPost({ ...novoPost, [e.target.name]: e.target.value });
+  };
+
+  const handlePublicar = () => {
+    const novo = {
+      id: posts.length + 1,
+      ...novoPost,
+    };
+    setPosts([novo, ...posts]);
+    setNovoPost({ titulo: "", descricao: "", imagem: "" });
+    setShowModal(false);
+  };
 
   return (
     <div
@@ -42,21 +62,10 @@ const Home: React.FC = () => {
             zIndex: 2,
           }}
         >
-          <h2
-            style={{
-              fontSize: 36,
-              fontWeight: "bold",
-              marginBottom: 10,
-            }}
-          >
+          <h2 style={{ fontSize: 36, fontWeight: "bold", marginBottom: 10 }}>
             Qual a melhor arma?
           </h2>
-          <p
-            style={{
-              fontSize: 18,
-              lineHeight: 1.5,
-            }}
-          >
+          <p style={{ fontSize: 18, lineHeight: 1.5 }}>
             Carabinas, espingardas ou rifles? Cada uma tem seu momento ideal.
             Antes de comprar, pense no tipo de caça, terreno e sua experiência.
             Uma boa arma não é só potência — é confiança.
@@ -86,21 +95,22 @@ const Home: React.FC = () => {
             Vi um veado branco e não consegui puxar o gatilho
           </h3>
           <p style={{ fontSize: 15, color: "#000", lineHeight: 1.6 }}>
-            Era por volta das 6 da manhã. O sol mal tinha nascido, e eu já estava
-            em posição perto do riacho onde costumo ficar. Silêncio total, só o
-            barulho leve da água correndo. Foi então que vi algo diferente entre
-            as árvores. Achei que fosse um reflexo, mas não — era um veado
-            branco, completamente branco.
+            Era por volta das 6 da manhã. O sol mal tinha nascido, e eu já
+            estava em posição perto do riacho onde costumo ficar. Silêncio
+            total, só o barulho leve da água correndo. Foi então que vi algo
+            diferente entre as árvores. Achei que fosse um reflexo, mas não —
+            era um veado branco, completamente branco.
             <br />
             <br />
             Nunca tinha visto nada igual em todos esses anos. Ele me olhou por
             alguns segundos, como se soubesse que estava sendo observado.
-            Peguei a arma, mirei… e parei. Não consegui atirar. Era como se aquele
-            bicho estivesse ali só pra me lembrar do lado bonito da natureza.
+            Peguei a arma, mirei… e parei. Não consegui atirar. Era como se
+            aquele bicho estivesse ali só pra me lembrar do lado bonito da
+            natureza.
             <br />
             <br />
-            Guardei a arma, peguei o celular e tirei uma foto. Foi o melhor “troféu”
-            que já trouxe da floresta.
+            Guardei a arma, peguei o celular e tirei uma foto. Foi o melhor
+            “troféu” que já trouxe da floresta.
           </p>
         </div>
 
@@ -147,20 +157,13 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section style={{ backgroundColor: "#F1F1F1", padding: "60px" }}>
-        <h3
-          style={{
-            fontSize: 22,
-            fontWeight: "bold",
-            color: "#00003C",
-            marginBottom: 40,
-          }}
-        >
+      <section style={{ backgroundColor: "#F1F1F1", padding: "60px", position: "relative" }}>
+        <h3 style={{ fontSize: 22, fontWeight: "bold", color: "#00003C", marginBottom: 30 }}>
           ÚLTIMOS POSTS
         </h3>
 
         {posts.length === 0 ? (
-          <p style={{ color: "#616161", fontSize: 16 }}>
+          <p style={{ color: "#616161", fontSize: 16, fontFamily: "'Cabin Condensed', sans-serif" }}>
             Nenhum post disponível no momento.
           </p>
         ) : (
@@ -174,6 +177,7 @@ const Home: React.FC = () => {
                 borderRadius: 10,
                 overflow: "hidden",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                fontFamily: "'Cabin Condensed', sans-serif",
               }}
             >
               <img
@@ -205,8 +209,8 @@ const Home: React.FC = () => {
                   >
                     {post.titulo}
                   </h4>
-                  <p style={{ fontSize: 15, color: "#616161" }}>
-                    {post.resumo}
+                  <p style={{ fontSize: 15, color: "#616161", fontFamily: "'Cabin Condensed', sans-serif" }}>
+                    {post.descricao}
                   </p>
                 </div>
                 <button
@@ -228,7 +232,134 @@ const Home: React.FC = () => {
             </div>
           ))
         )}
+
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <button
+            onClick={() => setShowModal(true)}
+            style={{
+              backgroundColor: "#8a7300",
+              color: "#fff",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: 6,
+              cursor: "pointer",
+              fontSize: 16,
+              fontWeight: "bold",
+              fontFamily: "'Cabin Condensed', sans-serif",
+              alignSelf: "flex-end",
+            }}
+          >
+            Publicar
+          </button>
+        </div>
       </section>
+
+      {showModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#fff",
+              padding: 30,
+              borderRadius: 10,
+              width: "90%",
+              maxWidth: 500,
+              fontFamily: "'Cabin Condensed', sans-serif",
+            }}
+          >
+            <h2 style={{ color: "#00003C", marginBottom: 20 }}>Novo Post</h2>
+            <input
+              type="text"
+              name="titulo"
+              placeholder="Título"
+              value={novoPost.titulo}
+              onChange={handleChange}
+              style={{
+                width: "100%",
+                marginBottom: 10,
+                padding: 10,
+                fontSize: 16,
+                borderRadius: 4,
+                border: "1px solid #ccc",
+              }}
+            />
+           <textarea
+  name="descricao"
+  placeholder="Descrição"
+  value={novoPost.descricao}
+  onChange={handleChange}
+  rows={4}
+  style={{
+    width: "100%",
+    marginBottom: 10,
+    padding: 10,
+    fontSize: 16,
+    borderRadius: 4,
+    border: "1px solid #ccc",
+    resize: "none",
+    fontFamily: "'Cabin Condensed', sans-serif",
+  }}
+/>
+            <input
+              type="text"
+              name="imagem"
+              placeholder="URL da imagem"
+              value={novoPost.imagem}
+              onChange={handleChange}
+              style={{
+                width: "100%",
+                marginBottom: 20,
+                padding: 10,
+                fontSize: 16,
+                borderRadius: 4,
+                border: "1px solid #ccc",
+              }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "#ccc",
+                  color: "#000",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handlePublicar}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "#00003C",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                Publicar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
