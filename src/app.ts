@@ -1,19 +1,17 @@
-// src/app.ts
-
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser'; // <-- IMPORTADO
+import cookieParser from 'cookie-parser';
 import prisma from './config/database';
 import swaggerUi from 'swagger-ui-express';
 
-// Importe suas rotas
 import userRoutes from './routes/userRoutes';
 import passwordResetRoutes from './routes/passwordResetRoutes';
 
-dotenv.config(); // <-- ADICIONADO E ESSENCIAL: Carrega as variáveis do .env
+dotenv.config();
 
-const swaggerSpec = require('./docs/swagger.ts');
+// CORREÇÃO APLICADA AQUI:
+const swaggerSpec = require('./docs/swagger'); 
 const app = express();
 
 app.use(cors({
@@ -22,20 +20,17 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(cookieParser()); // <-- ADICIONADO: Habilita o middleware de cookies
+app.use(cookieParser());
 
-// Suas rotas
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use(userRoutes); // A rota /login está aqui dentro
+app.use(userRoutes);
 app.use(passwordResetRoutes);
 
-// Middleware de tratamento de erros
 app.use((err: any, req: any, res: any, next: any) => {
   console.error(err);
   res.status(500).json({ error: 'Erro interno do servidor.' });
 });
 
-// Rota de verificação do banco
 app.get('/', async (req, res) => {
   try {
     await prisma.user.findMany();
