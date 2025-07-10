@@ -1,55 +1,80 @@
 import prisma from '../config/database';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
-
+import { sendEmail } from './emailService';
 
 export async function requestPasswordReset(email: string, baseUrl: string) {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
-    return;//se o usuario nao existir não retorna nada, e nem fala se o email existe ou não para manter sigilo
+    // Retorna silenciosamente para não revelar se o e-mail existe.
+    return;
   }
 
-  // Gera token com randomBytes
   const token = crypto.randomBytes(32).toString('hex');
-  const expiresAt = new Date(Date.now() + 60 * 60 * 500); //meia hora
+  // O token expira em 30 minutos.
+  const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
 
-  // Salva token no banco
   await prisma.passwordResetToken.create({
     data: {
       token,
       userId: user.id,
       expiresAt,
-    }
+    },
   });
 
-  // Monta link com o token...
   const link = `${baseUrl}/reset-password?token=${token}`;
-  
-  // como enviar o email de verdade????
-  console.log(`Link de redefinição de senha: ${link}`);//console com o link para testar...
+
+  const subject = 'Redefinição de Senha para o Seu Blog';
+  const textBody = `Olá ${user.nome || 'usuário'},\n\nVocê solicitou a redefinição de sua senha. Clique no link a seguir para continuar: ${link}\n\nSe você não solicitou isso, por favor, ignore este email.\n\nObrigado,\nA Equipe do Blog`;
+  const htmlBody = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <h2>Redefinição de Senha</h2>
+      <p>Olá ${user.nome || 'usuário'},</p>
+      <p>Recebemos uma solicitação para redefinir a senha da sua conta. Para prosseguir, clique no botão abaixo:</p>
+      <a href="${link}" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
+        Redefinir Senha
+      </a>
+      <p>O link expirará em 30 minutos.</p>
+      <p>Se você não fez essa solicitação, pode ignorar este email com segurança.</p>
+      <hr>
+      <p>Se tiver problemas com o botão, copie e cole a seguinte URL no seu navegador:</p>
+      <p><a href="${link}">${link}</a></p>
+      <br>
+      <p>Obrigado,</p>
+      <p><strong>A Equipe do Blog</strong></p>
+    </div>
+  `;
+
+  await sendEmail({
+    to: user.email,
+    subject: subject,
+    text: textBody,
+    html: htmlBody,
+  });
+
+  console.log(`Email de redefinição enviado para ${user.email}`);
 }
 
 export async function resetPassword(token: string, newPassword: string) {
-    //validação de token...
-  const resetToken = await prisma.passwordResetToken.findUnique({
+  const passwordResetToken = await prisma.passwordResetToken.findUnique({
     where: { token },
-    include: { user: true }
   });
 
-  if (!resetToken || resetToken.used || resetToken.expiresAt < new Date()) {//se o token nao existe, foi usado ou expirou
-    throw new Error('Token inválido ou expirado.');
+  if (!passwordResetToken || passwordResetToken.used || new Date() > passwordResetToken.expiresAt) {
+    throw new Error('Token inválido, expirado ou já utilizado.');
   }
 
-  // Muda para a nova senha
-  const senha_hash = await bcrypt.hash(newPassword, 12);//bcrypt custo 12 novamente
-  await prisma.user.update({
-    where: { id: resetToken.userId },//id do usuario que foi gerado o token
-    data: { senha_hash }// nova senha
-  });
-
-  // Marca token como usado
-  await prisma.passwordResetToken.update({
-    where: { id: resetToken.id },
-    data: { used: true }
-  });
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+  await prisma.$transaction([
+    prisma.user.update({
+      where: { id: passwordResetToken.userId },
+      data: {
+        senha_hash: hashedPassword },
+    }),
+    prisma.passwordResetToken.update({
+      where: { id: passwordResetToken.id },
+      data: { used: true },
+    }),
+  ]);
 }
