@@ -1,5 +1,13 @@
+<<<<<<< Updated upstream
 import { useState } from "react";
 import { enviarCadastro } from "../src/services/cadastroService";
+=======
+import React, { useState } from "react";
+import { enviarCadastro } from "../src/services/cadastroService";
+import BannerLateral from "../src/components/BannerLateral";
+import FormField from "../src/components/FormField";
+import SubmitButton from "../src/components/SubmitButton";
+>>>>>>> Stashed changes
 
 import CadastroLayout from "../src/components/CadastroLayout";
 import CadastroForm from "../src/components/CadastroForm";
@@ -54,6 +62,7 @@ const Cadastro = () => {
   };
 
   return (
+<<<<<<< Updated upstream
     <CadastroLayout>
       <CadastroForm
         formData={formData}
@@ -61,6 +70,103 @@ const Cadastro = () => {
         onSubmit={handleSubmit}
       />
     </CadastroLayout>
+=======
+    <form onSubmit={handleSubmit}>
+      <div className="flex flex-col bg-white min-h-screen p-8">
+        <div className="flex flex-col md:flex-row items-start bg-white w-full">
+          <BannerLateral
+            image="/img/caca.jpg"
+            text={
+              <>
+                Bem-vindo de volta ao Blog de caça
+                <br />
+                Faça login para continuar
+              </>
+            }
+          />
+          <div className="flex flex-col items-start mt-10 mx-auto">
+            <h2 className="text-[#8A7300] text-[32px] font-bold mb-10 text-center w-full">
+              CADASTRE-SE
+            </h2>
+
+            <FormField
+              label="Nome completo:"
+              name="nome"
+              type="text"
+              value={formData.nome}
+              onChange={handleChange}
+            />
+
+            <FormField
+              label="Nickname:"
+              name="nickname"
+              type="text"
+              value={formData.nickname}
+              onChange={handleChange}
+            />
+
+            <FormField
+              label="CPF:"
+              name="cpf"
+              type="text"
+              value={formData.cpf}
+              onChange={handleChange}
+            />
+
+            <FormField
+              label="Número de telefone:"
+              name="numero_telefone"
+              type="tel"
+              value={formData.numero_telefone}
+              onChange={handleChange}
+            />
+
+            <FormField
+              label="Foto de perfil (URL):"
+              name="foto_perfil"
+              type="text"
+              value={formData.foto_perfil}
+              onChange={handleChange}
+            />
+
+            <FormField
+              label="Digite seu e-mail:"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="exemplo@gmail.com"
+            />
+
+            <FormField
+              label="Crie uma senha:"
+              name="senha"
+              type="password"
+              value={formData.senha}
+              onChange={handleChange}
+            />
+
+            <FormField
+              label="Confirme a senha:"
+              name="confirmarSenha"
+              type="password"
+              value={formData.confirmarSenha}
+              onChange={handleChange}
+            />
+
+            <SubmitButton label="Criar conta" />
+
+            <div className="flex justify-center gap-4 mt-2">
+              <span className="text-[#00003C] text-xl">Já tem uma conta?</span>
+              <a href="/login" className="text-[#00003C] text-xl underline">
+                Entrar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+>>>>>>> Stashed changes
   );
 };
 
