@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Login from "../pages/Login";
 import Cadastro from "../pages/Cadastro";
 import Home from "../pages/Home"; 
+import PerfilUsuario from '../pages/PerfilUsuario';
 
 
 const App: React.FC = () => {
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <Route path="/cadastro" element={<Cadastro />} />
          <Route path="/home" element={<Home />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/perfil" element={<PerfilUsuario />} />
       </Routes>
     </Router>
   );

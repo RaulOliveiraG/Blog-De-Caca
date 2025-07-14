@@ -40,7 +40,6 @@ const Header: React.FC = () => {
             Blog de caça
           </div>
 
-      
           <nav style={{ display: "flex", gap: 30 }}>
             <button onClick={() => navigate("/home")} style={navLinkStyle("#8a7300")}>Início</button>
             <button onClick={() => navigate("/grupos")} style={navLinkStyle()}>Grupos</button>
