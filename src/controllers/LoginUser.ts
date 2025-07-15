@@ -16,7 +16,7 @@ export async function LoginUser(req: Request, res: Response) {
 
     limparTentativas(email);
 
-    const payload = { userId: usuario.id };
+    const payload = { id: usuario.id };
 
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: '15m',
