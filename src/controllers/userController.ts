@@ -20,10 +20,7 @@ export async function getAllUsers(req: Request, res: Response) {
   }
 }
 
-/**
- * Controller para deletar um usuário.
- * Verifica se o requisitante é admin ou o próprio usuário.
- */
+
 export async function deleteUser(req: Request, res: Response) {
   // Agora o TypeScript sabe que req.user é do tipo UserPayload | undefined
   const loggedInUser = req.user;
@@ -54,6 +51,35 @@ export async function deleteUser(req: Request, res: Response) {
     }
     
     console.error('Erro ao deletar usuário:', error);
+    return res.status(500).json({ message: 'Erro interno do servidor.' });
+  }
+}
+
+export async function updateUser(req: Request, res: Response) {
+  const loggedInUser = req.user;
+  const userIdToUpdate = parseInt(req.params.id, 10);
+  const userData = req.body;
+
+  if (!loggedInUser) {
+    return res.status(401).json({ message: 'Não autenticado. Token inválido ou ausente.' });
+  }
+
+  if (isNaN(userIdToUpdate)) {
+    return res.status(400).json({ message: 'ID de usuário inválido.' });
+  }
+
+  if (loggedInUser.role !== 'admin' && loggedInUser.id !== userIdToUpdate) {
+    return res.status(403).json({ message: 'Acesso negado. Você não tem permissão para realizar esta ação.' });
+  }
+
+  try {
+    const updatedUser = await userService.updateUserById(userIdToUpdate, userData);
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+    console.error('Erro ao atualizar usuário:', error);
     return res.status(500).json({ message: 'Erro interno do servidor.' });
   }
 }

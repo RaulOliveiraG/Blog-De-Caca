@@ -1,8 +1,5 @@
-// src/routes/userRoutes.ts
-
 import { Router } from 'express';
-// IMPORTAÇÃO ATUALIZADA: adicionamos 'deleteUser'
-import { registerUser, getAllUsers, deleteUser } from '../controllers/userController';
+import { registerUser, getAllUsers, deleteUser, updateUser } from '../controllers/userController';
 import { LoginUser } from '../controllers/LoginUser';
 import { validateUser } from '../middlewares/validateUser';
 import { onlyAdmin } from '../middlewares/authAdmin';
@@ -57,7 +54,6 @@ router.post('/registro', validateUser, registerUser);
  */
 router.get('/usuarios', authMiddleware, onlyAdmin, getAllUsers);
 
-// --- NOVA ROTA E DOCUMENTAÇÃO SWAGGER ADICIONADAS ---
 /**
  * @swagger
  * /usuarios/{id}:
@@ -111,3 +107,48 @@ router.delete('/usuarios/:id', authMiddleware, deleteUser);
 router.post('/login', LimitadorTentativasLogin, validateLogin, LoginUser);
 
 export default router;
+
+
+/**
+ * @swagger
+ * /usuarios/{id}:
+ *   put:
+ *     summary: Atualiza um usuário
+ *     tags: [Usuários]
+ *     description: Atualiza os dados de um usuário pelo seu ID. Acesso permitido apenas para administradores ou para o próprio usuário.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: O ID numérico do usuário a ser atualizado.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nickname: { type: string }
+ *               senha: { type: string }
+ *               cpf: { type: string }
+ *               nome: { type: string }
+ *               email: { type: string }
+ *               numero_telefone: { type: string }
+ *               foto_perfil: { type: string }
+ *     responses:
+ *       200:
+ *         description: Usuário atualizado com sucesso.
+ *       400:
+ *         description: Erro de validação ou ID de usuário inválido.
+ *       401:
+ *         description: Não autenticado (token não fornecido ou inválido).
+ *       403:
+ *         description: Acesso negado (usuário não é admin e nem o dono da conta).
+ *       404:
+ *         description: Usuário não encontrado.
+ */
+router.put("/usuarios/:id", authMiddleware, updateUser);

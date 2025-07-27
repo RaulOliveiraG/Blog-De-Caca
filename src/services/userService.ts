@@ -1,5 +1,3 @@
-// src/services/userService.ts
-
 import prisma from '../config/database';
 import bcrypt from 'bcrypt';
 
@@ -74,5 +72,28 @@ export async function getAllUsersService() {
 export async function deleteUserById(id: number) {
   return prisma.user.delete({
     where: { id },
+  });
+}
+
+
+export async function updateUserById(id: number, data: any) {
+  if (data.senha) {
+    data.senha_hash = await bcrypt.hash(data.senha, 12);
+    delete data.senha;
+  }
+  return prisma.user.update({
+    where: { id },
+    data,
+    select: {
+      id: true,
+      nickname: true,
+      cpf: true,
+      nome: true,
+      email: true,
+      numero_telefone: true,
+      data_cadastro: true,
+      foto_perfil: true,
+      role: true,
+    },
   });
 }
