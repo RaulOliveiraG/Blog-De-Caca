@@ -1,8 +1,7 @@
 import prisma from '../config/database';
 import bcrypt from 'bcrypt';
 
-interface CreateUserDTO {//define quais serão os dados para criar um usuario....
-//nosso "data" abaixo:
+interface CreateUserDTO {
   nickname: string;
   senha: string;
   cpf: string;
@@ -12,11 +11,10 @@ interface CreateUserDTO {//define quais serão os dados para criar um usuario...
   foto_perfil?: string;
 }
 
-
 export async function createUser(data: CreateUserDTO) {
   // Verifica se email já existe
   const existingEmail = await prisma.user.findUnique({
-    where: { email: data.email }//procura onde o email no banco é igual a "data"email, no caso o email que o usuario digitou
+    where: { email: data.email }
   });
 
   if (existingEmail) {
@@ -25,7 +23,7 @@ export async function createUser(data: CreateUserDTO) {
 
   // Verifica se CPF já existe
   const existingCpf = await prisma.user.findUnique({
-    where: { cpf: data.cpf }//procura onde o cpf no banco é igual a "data"cpf
+    where: { cpf: data.cpf }
   });
 
   if (existingCpf) {
@@ -33,32 +31,59 @@ export async function createUser(data: CreateUserDTO) {
   }
 
   // Hash da senha
-  const senha_hash = await bcrypt.hash(data.senha, 12);//Criptografa a senha usando bcrypt com custo 12
-  //o custo 12, define quantas vezes a senha vai ser processada para gerar um hash, quanto maior mais lento e mais seguro...
+  const senha_hash = await bcrypt.hash(data.senha, 12);
 
   // Verifica se é o primeiro usuário
   const userCount = await prisma.user.count();
 
   const usuario = await prisma.user.create({
-    data: {//passa as informações de "data" para o formato que será enviado ao banco
+    data: {
       nickname: data.nickname,
-      senha_hash,//senha já criptografada 
+      senha_hash,
       cpf: data.cpf,
       nome: data.nome,
       email: data.email,
       numero_telefone: data.numero_telefone,
       foto_perfil: data.foto_perfil,
-      role: userCount === 0 ? 'admin' : 'user'//se for o primeiro vira admin, se nao for vira user
+      role: userCount === 0 ? 'admin' : 'user'
     }
   });
-  // Não retorna senha_hash
-  const { senha_hash: _, ...userWithoutPassword } = usuario;//remove o campo senha_hash do return abaixo, por segurança....
+  
+  const { senha_hash: _, ...userWithoutPassword } = usuario;
   return userWithoutPassword;
 }
 
-
 export async function getAllUsersService() {
   return prisma.user.findMany({
+    select: {
+      id: true,
+      nickname: true,
+      cpf: true,
+      nome: true,
+      email: true,
+      numero_telefone: true,
+      data_cadastro: true,
+      foto_perfil: true,
+      role: true,
+    },
+  });
+}
+
+export async function deleteUserById(id: number) {
+  return prisma.user.delete({
+    where: { id },
+  });
+}
+
+
+export async function updateUserById(id: number, data: any) {
+  if (data.senha) {
+    data.senha_hash = await bcrypt.hash(data.senha, 12);
+    delete data.senha;
+  }
+  return prisma.user.update({
+    where: { id },
+    data,
     select: {
       id: true,
       nickname: true,

@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import userRoutes from './routes/userRoutes';
 import passwordResetRoutes from './routes/passwordResetRoutes';
+import postRoutes from './routes/postRoutes';
 
 dotenv.config();
 
@@ -22,18 +23,19 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use(userRoutes);
-app.use(passwordResetRoutes);
+app.use('/api', userRoutes);
+app.use('/api', passwordResetRoutes);
+app.use('/api/posts', postRoutes);
 
 app.use((err: any, req: any, res: any, next: any) => {
-  console.error(err);
+  console.error(err.stack);
   res.status(500).json({ error: 'Erro interno do servidor.' });
 });
 
 app.get('/', async (req, res) => {
   try {
-    await prisma.user.findMany();
-    res.send('Conexão com o banco de dados postgresql bem-sucedida!');
+    await prisma.$queryRaw`SELECT 1`;
+    res.send('API online e conexão com o banco de dados bem-sucedida!');
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao conectar com o banco de dados.');
