@@ -7,32 +7,96 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id              Int      @id @default(autoincrement()) // Chave primária auto-incrementada
-  nickname        String                                // Apelido do usuário
-  senha_hash      String                                // Hash da senha (bcrypt)
-  cpf             String   @unique                      // CPF único
-  nome            String                                // Nome completo
-  email           String   @unique                      // E-mail único
-  numero_telefone String?                               // Telefone (opcional)
-  data_cadastro   DateTime @default(now())              // Data de cadastro (agora)
-  foto_perfil     String?                               // URL da foto de perfil (opcional)
-  role            String   @default("user")             // Papel do usuário (user/admin)
-  
-   passwordResetTokens PasswordResetToken[]//Este usuário pode ter vários tokens de recuperação...
-   //relção inversa ao model de baixo
+// Enum para garantir que apenas tipos de reação válidos sejam salvos.
+enum ReactionType {
+  LIKE
+  LOVE
+  HAHA
+  WOW
+  SAD
+  ANGRY
+}
 
-  @@map("usuario") // Mapeia o modelo User para a tabela "usuario" no banco
+model User {
+  id                  Int      @id @default(autoincrement())
+  nickname            String
+  senha_hash          String
+  cpf                 String   @unique
+  nome                String
+  email               String   @unique
+  numero_telefone     String?
+  data_cadastro       DateTime @default(now())
+  foto_perfil         String?
+  role                String   @default("user")
+
+  // Relacionamentos do usuário
+  posts               Post[]
+  comments            Comment[] // Mantido para futuras implementações
+  reactions           Reaction[]
+  passwordResetTokens PasswordResetToken[]
+
+  @@map("usuario")
+}
+
+model Post {
+  id             Int      @id @default(autoincrement())
+  titulo         String
+  texto          String
+  imagemUrl      String?
+  dataPublicacao DateTime @default(now())
+
+  // Relacionamento com o autor (User)
+  autorId        Int
+  autor          User     @relation(fields: [autorId], references: [id], onDelete: Cascade)
+
+  // Relacionamentos com Comentários e Reações
+  comments       Comment[] // Mantido para futuras implementações
+  reactions      Reaction[]
+
+  @@map("posts")
+}
+
+// Modelo de Reação (substitui o Like)
+model Reaction {
+  id          Int      @id @default(autoincrement())
+  type        ReactionType // O tipo da reação (LIKE, LOVE, etc.)
+  createdAt   DateTime @default(now()) // A data da reação
+
+  // Relacionamentos
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId      Int
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  // Garante que um usuário só pode ter UMA reação por post
+  @@unique([userId, postId])
+  @@map("reactions")
+}
+
+// Modelo de Comentário (mantido para o futuro)
+model Comment {
+  id          Int      @id @default(autoincrement())
+  texto       String
+  dataCriacao DateTime @default(now())
+  autorId     Int
+  autor       User     @relation(fields: [autorId], references: [id], onDelete: Cascade)
+  postId      Int
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parentId    Int?
+  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies     Comment[] @relation("CommentReplies")
+
+  @@map("comments")
 }
 
 model PasswordResetToken {
-  id         Int      @id @default(autoincrement())
-  token      String   @unique
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id])//esse token pertence apenas a um usuario
-  expiresAt  DateTime
-  used       Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
 
   @@map("password_reset_token")
 }

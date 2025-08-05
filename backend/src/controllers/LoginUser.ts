@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import { adicionarTentativa, limparTentativas } from '../middlewares/LoginRateLimiter';
-import { autenticarUsuario } from '../services/authService';
+import { autenticarUsuario, generateTokensAndSetCookie } from '../services/authService';
 
 export async function LoginUser(req: Request, res: Response) {
   const { email, senha } = req.body;
@@ -16,23 +15,7 @@ export async function LoginUser(req: Request, res: Response) {
 
     limparTentativas(email);
 
-    const payload = { userId: usuario.id };
-
-    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {
-      expiresIn: '15m',
-    });
-
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET!, {
-      expiresIn: '7d',
-    });
-
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    const { accessToken } = generateTokensAndSetCookie(res, usuario);
 
     return res.status(200).json({
       message: 'Login realizado com sucesso!',

@@ -1,0 +1,166 @@
+.home-container {
+  background-color: #f4f4f4;
+  color: #333;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background-color: #0d1b2a;
+  color: white;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+}
+
+.auth-actions button {
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  padding: 8px 15px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.auth-actions .btn-signup {
+  background-color: white;
+  color: #0d1b2a;
+}
+
+/* Hero Section */
+.hero-section {
+  background-image: url('../assets/img/banner.webp'); /* Adicione a imagem de fundo das armas */
+  background-size: cover;
+  position: relative;
+  background-position: center;
+  padding: 80px 5%;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(216, 216, 216, 0.4); 
+  z-index: 1;
+}
+
+.hero-content,
+.hero-image-container {
+  position: relative;
+  z-index: 2; 
+}
+
+.hero-content {
+  flex-basis: 50%;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+}
+
+.hero-image-container {
+  flex-basis: 40%;
+  text-align: center;
+  position: relative;
+}
+
+.hero-gun-image {
+  max-width: 100%;
+  filter: drop-shadow(0 0 15px black);
+}
+
+
+/* Story Section */
+.story-section {
+  display: flex;
+  padding: 50px 5%;
+  gap: 30px;
+  background-color: #fff;
+}
+
+.story-text {
+  flex-basis: 50%;
+}
+
+.story-images {
+  flex-basis: 50%;
+  position: relative;
+  height: 350px;
+}
+
+.story-images img {
+  border: 5px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border-radius: 4px;
+  position: absolute;
+}
+
+.story-img-1 {
+  width: 60%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.story-img-2 {
+  width: 60%;
+  bottom: 0;
+  right: 0;
+}
+
+/* Latest Posts */
+.latest-posts {
+  padding: 50px 5%;
+}
+.latest-posts h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+}
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+.post-card {
+  background: white;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.post-card img {
+  width: 150px;
+  height: 100%;
+  object-fit: cover;
+}
+.post-content {
+  padding: 20px;
+}
+.arrow-link {
+  background-color: #0d1b2a;
+  color: white;
+  padding: 20px;
+  font-size: 2rem;
+  text-decoration: none;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,135 @@
+/* --- ARQUIVO NOVO: src/pages/UserProfile.css --- */
+
+/* Importa a fonte, caso não esteja globalmente definida */
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap');
+
+/* Container principal da página de perfil */
+.profile-page-container {
+  background-color: #f4f4f4; /* Mesmo fundo da HomePage */
+  color: #333;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh; /* Garante que o fundo ocupe a tela toda */
+}
+
+/* O cabeçalho .home-header já é estilizado pelo CSS global ou da HomePage, então não precisamos redefini-lo */
+
+/* Conteúdo principal abaixo do header */
+.profile-main-content {
+  padding: 40px 5%; /* Espaçamento padrão das seções */
+}
+
+/* Card de informações do usuário */
+.profile-info-card {
+  background-color: #0d1b2a; /* Cor de destaque do header */
+  color: white;
+  padding: 30px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px; /* Espaço antes da seção de posts */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-details h1 {
+  margin: 0 0 5px 0;
+  font-size: 2.5rem;
+}
+
+.profile-details p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #ccc; /* Cor mais suave para o email */
+}
+
+/* Botão de Criar Post */
+.btn-create-post {
+  background-color: white;
+  color: #0d1b2a;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-create-post:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+/* Seção "Meus Posts" */
+.my-posts-section h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #ccc; /* Mesmo estilo de título da HomePage */
+  padding-bottom: 10px;
+  color: #333;
+}
+
+/* Grid de Posts - Reutilizando o estilo da HomePage para consistência */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+/* Estilo para o caso de não haver posts */
+.posts-grid p {
+  color: #777;
+  font-style: italic;
+}
+
+/* Card de Post - Exatamente como na HomePage */
+.post-card {
+  background: white;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.post-card img {
+  width: 150px;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-content {
+  padding: 20px;
+  flex-grow: 1; /* Garante que o conteúdo ocupe o espaço */
+}
+
+.post-content h4 {
+  margin: 0 0 10px 0;
+}
+
+.post-content p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.arrow-link {
+  background-color: #0d1b2a;
+  color: white;
+  padding: 20px;
+  font-size: 2rem;
+  text-decoration: none;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.arrow-link:hover {
+  background-color: #1b2f45;
+}
