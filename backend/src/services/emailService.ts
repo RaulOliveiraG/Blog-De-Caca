@@ -1,3 +1,4 @@
+
 // emailService.ts (VERSÃO CORRETA PARA GMAIL)
 
 import nodemailer from 'nodemailer';

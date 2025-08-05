@@ -1,10 +1,11 @@
+
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import prisma from './config/database';
 import swaggerUi from 'swagger-ui-express';
-
+import commentRoutes from './routes/commentRoutes';
 import userRoutes from './routes/userRoutes';
 import passwordResetRoutes from './routes/passwordResetRoutes';
 import postRoutes from './routes/postRoutes';
@@ -31,6 +32,8 @@ app.use((err: any, req: any, res: any, next: any) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Erro interno do servidor.' });
 });
+
+app.use('/api', commentRoutes);
 
 app.get('/', async (req, res) => {
   try {
