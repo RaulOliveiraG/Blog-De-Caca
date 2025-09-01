@@ -1,0 +1,105 @@
+.new-post-page .my-btn {
+  background-color: #0d1b2a;
+  color: #fff;
+  border-radius: 12px;
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: filter 0.2s ease;
+}
+
+.new-post-page .my-btn:hover {
+  background-color: #12304a;
+  filter: brightness(1.05);
+}
+
+.new-post-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.new-post-page h1 {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  color: #0d1b2a;
+}
+
+.create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.create-form label {
+  font-weight: 500;
+  color: #444;
+}
+
+.create-form input,
+.create-form textarea {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e3e3e3;
+  outline: none;
+  resize: vertical;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.create-form input:focus,
+.create-form textarea:focus {
+  border-color: #b58ad6;
+  box-shadow: 0 0 0 4px rgba(181, 138, 214, 0.18);
+}
+
+.btn-primary {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #b58ad6, #8a63b7);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: filter 0.2s ease;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.new-post-page .btn.btn-primary{
+  background-color: #0d1b2a !important;
+  border-color:     #0d1b2a !important;
+  border-radius:    12px !important;
+  height:           40px;
+  padding:          0 16px;
+  line-height:      1;
+}
+.new-post-page .btn.btn-primary:hover,
+.new-post-page .btn.btn-primary:focus{
+  background-color: #12304a !important;
+  border-color:     #12304a !important;
+  box-shadow: 0 0 0 .25rem rgba(13,27,42,.18) !important;
+}
+.new-post-page .btn.btn-primary:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+}
+
+/* (opcional) inputs com o mesmo “feel” do resto */
+.new-post-page input,
+.new-post-page textarea{
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.new-post-page input:focus,
+.new-post-page textarea:focus{
+  outline: none;
+  border-color: #0d1b2a;
+  box-shadow: 0 0 0 4px rgba(13,27,42,.10);
+}

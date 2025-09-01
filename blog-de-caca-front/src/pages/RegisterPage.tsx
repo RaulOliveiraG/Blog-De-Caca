@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../lib/api';
 import backgroundImage from '../assets/img/background.png'; // Reutilizando a imagem de fundo
 import './LoginPage.css'; // Reutilizando o mesmo CSS
 
@@ -38,7 +38,7 @@ export function RegisterPage() {
       const { confirmar_senha, ...dataToSend } = formData;
       
       // 3. Envia a requisição POST para a API
-      await axios.post('https://blog-de-caca-pzk7.onrender.com/registro', dataToSend);
+     await api.post('/registro', dataToSend);
 
       alert('Usuário criado com sucesso! ✅\nAgora você será redirecionado para fazer o login.');
       navigate('/login'); // 4. Redireciona para a página de login

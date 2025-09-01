@@ -1,0 +1,80 @@
+/* mesma fonte da Home */
+.site-page {
+  background:#f4f4f4;
+  color:#333;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  font-family:'Segoe UI', sans-serif;
+}
+.site-main { flex:1; }
+
+/* HEADER – idêntico ao da Home */
+.site-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 5%;
+  background:#0d1b2a;
+  color:#fff;
+}
+.site-logo a {
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+  font-size:1.2rem;
+}
+.site-nav a {
+  color:#fff;
+  text-decoration:none;
+  margin:0 12px;
+}
+.site-nav a:hover { text-decoration:underline; }
+
+/* Botões EXACTAMENTE iguais (altura/padding/estilo) */
+.site-actions .btn-login,
+.site-actions .btn-signup {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:38px;           /* força a mesma altura */
+  padding:0 14px;        /* mesmo padding lateral da Home */
+  border-radius:4px;
+  border:1px solid #fff;
+  background:transparent;
+  color:#fff;
+  text-decoration:none;
+  font:inherit;
+  line-height:1;
+  cursor:pointer;
+}
+.site-actions .btn-signup {
+  background:#fff;
+  color:#0d1b2a;
+}
+
+/* FOOTER – centralizado e simples */
+.site-footer {
+  background:#0d1b2a;
+  color:#fff;
+  padding:16px 5%;
+  text-align:center;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .site-header { flex-wrap:wrap; gap:10px; }
+  .site-nav {
+    width:100%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px 12px;
+  }
+  .site-actions {
+    width:100%;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+  }
+}

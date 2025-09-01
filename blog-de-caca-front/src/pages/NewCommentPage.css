@@ -1,0 +1,34 @@
+/* Reaproveita o mesmo “card” do detalhe para consistência */
+.post-detail { max-width: 1000px; margin: 24px auto; background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:18px; box-shadow:0 4px 10px rgba(0,0,0,.06); }
+.post-detail.loading { background:transparent; border:none; box-shadow:none; padding:40px 5%; }
+.post-head { display:flex; justify-content:space-between; align-items:center; }
+.user { display:flex; gap:12px; align-items:center; }
+.avatar { width:48px; height:48px; border-radius:999px; background:#e5e7eb; }
+.title { color:#0d1b2a; margin:12px 0; }
+.content-row { display:grid; grid-template-columns: 1fr 320px; gap:18px; align-items:start; }
+.content-row .text { white-space:pre-wrap; color:#333; line-height:1.6; }
+.content-row .thumb { width:100%; height:220px; object-fit:cover; border-radius:8px; }
+.btn-outline { border:1px solid #0d1b2a; color:#0d1b2a; padding:8px 12px; border-radius:8px; text-decoration:none; background:transparent; cursor:pointer; }
+.btn-outline:disabled { opacity:.6; cursor:not-allowed; }
+@media (max-width: 900px) { .content-row { grid-template-columns: 1fr; } .content-row .thumb { height:200px; } }
+
+/* Erros locais (mesmo estilo de outras telas) */
+.error-box { margin:12px 5%; background:#ffe9e9; border:1px solid #ffcccc; color:#a40000; padding:10px 12px; border-radius:10px; }
+
+/* Novo comentário */
+.comment-new { margin-top:16px; background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:12px; }
+.comment-new h3 { margin:0 0 8px; color:#0d1b2a; }
+.comment-form { display:grid; gap:10px; }
+.comment-textarea {
+  width:100%;
+  border:1px solid #e5e7eb;
+  border-radius:8px;
+  padding:10px 12px;
+  background:#fff;
+  resize:vertical;
+  min-height:120px;
+  font:inherit;
+  color:#333;
+}
+.comment-actions { display:flex; justify-content:space-between; align-items:center; }
+.muted { color:#667085; font-size:.9rem; }

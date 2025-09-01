@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import backgroundImage from '../assets/img/background.webp'; // Coloque a imagem de fundo na pasta assets
-import axios from 'axios'
+import api from '../lib/api';
 import './LoginPage.css';
 
 export function LoginPage() {
@@ -12,12 +12,9 @@ export function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await axios.post('http://localhost:3000/api/login', {
-        email,
-        senha
-      })
+      const res = await api.post('/login', { email, senha });
 
-      localStorage.setItem('token', res.data.accessToken)
+      localStorage.setItem('accessToken', res.data.accessToken);
       alert('Login feito com sucesso!')
       navigate('/home')
     } catch (err: any) {

@@ -1,0 +1,20 @@
+.post-card-figma {
+  background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+  padding:16px; display:grid; grid-template-columns: 220px 1fr 220px; gap:14px;
+  box-shadow:0 4px 10px rgba(0,0,0,.06);
+}
+.post-card-figma .left { display:flex; gap:12px; align-items:flex-start; }
+.post-card-figma .avatar {
+  width:48px; height:48px; border-radius:999px; background:#e5e7eb;
+}
+.post-card-figma .meta { display:flex; flex-direction:column; gap:2px; }
+.post-card-figma .title { margin:0 0 6px; color:#0d1b2a; }
+.post-card-figma .excerpt { color:#444; line-height:1.5; margin:0 0 10px; }
+.post-card-figma .right img { width:100%; height:160px; object-fit:cover; border-radius:8px; }
+.btn-outline {
+  border:1px solid #0d1b2a; color:#0d1b2a; padding:8px 12px; border-radius:8px; text-decoration:none;
+}
+@media (max-width: 980px) {
+  .post-card-figma { grid-template-columns: 1fr; }
+  .post-card-figma .right img { height:200px; }
+}

@@ -88,8 +88,7 @@ export function UserProfile() {
         <div className="logo">Blog de caça</div>
         <nav className="main-nav">
           <a href="/home">Início</a>
-          <a href="/grupos">Grupos</a>
-          <a href="/busca">Busca</a>
+          <a href="/busca">Publicações</a>
           <a href="/perfil">Perfil</a>
         </nav>
         <div className="auth-actions">
@@ -136,6 +135,8 @@ export function UserProfile() {
           onPostCreated={fetchData} // Recarrega os dados após criar um post
         />
       </Modal>
+
+      <footer className="site-footer">© 2025 Blog de caça</footer>
     </div>
   );
 }
