@@ -2,12 +2,13 @@
   "name": "hunting-blog",
   "version": "1.0.0",
   "main": "dist/app.js",
-  "scripts": {
-    "dev": "ts-node-dev src/app.ts",
-    "build": "tsc",
-    "start": "node dist/app.js",
-    "lint": "eslint . --ext .ts"
-  },
+"scripts": {
+  "dev": "ts-node-dev src/app.ts",
+  "build": "tsc",
+  "start": "node dist/app.js",
+  "migrate": "prisma migrate deploy",
+  "lint": "eslint . --ext .ts"
+},
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "bcrypt": "^6.0.0",
