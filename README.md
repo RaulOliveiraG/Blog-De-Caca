@@ -8,7 +8,7 @@ Um blog dedicado à comunidade de caça, onde usuários podem compartilhar exper
 ## ✨ Funcionalidades
 
 - **Autenticação de Usuário**  
-  Crie sua conta ou faça login para acessar todas as funcionalidades do blog.
+  Crie sua conta ou faça login para acessar todas as funcionalidades do blog(contém recuperação de senha via Email).
 
 - **Postagens sobre Caça**  
   Compartilhe suas experiências, dicas e histórias sobre caça.
@@ -22,11 +22,9 @@ Um blog dedicado à comunidade de caça, onde usuários podem compartilhar exper
 - **Histórico de Atividades**  
   Acompanhe suas postagens, comentários e interações em um histórico pessoal.
 
-- **Privacidade de Postagens**  
+- **Busca de Usuarios**  
   Escolha se sua postagem será pública ou visível apenas para usuários selecionados.
 
-- **Interação via WhatsApp**  
-  Responda e compartilhe postagens diretamente pelo WhatsApp.
 
 ---
 
@@ -58,13 +56,6 @@ npx prisma migrate dev --name init
 Inicie o projeto:
 
 npm run dev
-📁 Estrutura do Projeto
-src/
-controllers/ — Lógica das rotas
-models/ — Modelos de dados
-views/ — Templates e visualização
-routes/ — Definição das rotas
-middlewares/ — Middlewares de autenticação e validação
-prisma/ — Configuração do ORM
 💡 Contribua
 Sinta-se à vontade para abrir issues, sugerir melhorias ou enviar pull requests!
+
