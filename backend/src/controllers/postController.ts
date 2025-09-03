@@ -1,26 +1,38 @@
-import { Response, Request } from 'express';
+import { Request, Response } from 'express';
 import { postService } from '../services/postService';
 import { Prisma, ReactionType } from '@prisma/client';
-import { AuthRequest } from '../middlewares/authMiddleware'; // Importamos o tipo AuthRequest
 
 export const postController = {
-  // Rota protegida, usa AuthRequest
-  create: async (req: AuthRequest, res: Response) => {
+  create: async (req: Request, res: Response) => {
+    console.log('[Post Controller] Recebida requisição para CRIAR post.');
     const { titulo, texto, imagemUrl } = req.body;
     const autorId = req.user?.id;
 
-    if (!autorId) return res.status(401).json({ message: 'Usuário não autenticado.' });
-    if (!titulo || !texto) return res.status(400).json({ message: 'Título e texto são obrigatórios.' });
+    console.log('[Post Controller] Dados recebidos:', { titulo, texto, imagemUrl, autorId });
+
+    if (!autorId) {
+      console.error('[Post Controller] Falha: autorId não encontrado no req.user.');
+      return res.status(401).json({ message: 'Usuário não autenticado.' });
+    }
+    if (!titulo || !texto) {
+      console.error('[Post Controller] Falha: Título ou texto ausentes.');
+      return res.status(400).json({ message: 'Título e texto são obrigatórios.' });
+    }
 
     try {
       const newPost = await postService.createPost({ titulo, texto, imagemUrl, autorId });
+      console.log('[Post Controller] Post criado com sucesso no banco de dados.');
       res.status(201).json(newPost);
     } catch (error) {
-      res.status(500).json({ message: 'Erro ao criar o post.', error });
+      console.error('[Post Controller] ERRO CRÍTICO ao CRIAR post:', error);
+      
+      res.status(500).json({ 
+        message: 'Erro interno do servidor ao criar o post.', 
+        errorDetails: error instanceof Error ? error.message : String(error) 
+      });
     }
   },
 
-  // Rota pública, usa Request normal
   getAll: async (req: Request, res: Response) => {
     try {
       const posts = await postService.findAllPosts();
@@ -30,7 +42,6 @@ export const postController = {
     }
   },
 
-  // Rota pública, usa Request normal
   getById: async (req: Request, res: Response) => {
     try {
       const post = await postService.findPostById(parseInt(req.params.id));
@@ -41,11 +52,8 @@ export const postController = {
     }
   },
 
-  // Rota protegida, usa AuthRequest
-  update: async (req: AuthRequest, res: Response) => {
+  update: async (req: Request, res: Response) => {
     try {
-      // A verificação de propriedade (se o post pertence ao req.user.id)
-      // é feita no postOwnershipMiddleware, então aqui podemos prosseguir.
       const updatedPost = await postService.updatePost(parseInt(req.params.id), req.body);
       res.status(200).json(updatedPost);
     } catch (error) {
@@ -53,10 +61,8 @@ export const postController = {
     }
   },
 
-  // Rota protegida, usa AuthRequest
-  delete: async (req: AuthRequest, res: Response) => {
+  delete: async (req: Request, res: Response) => {
     try {
-      // A verificação de propriedade é feita no postOwnershipMiddleware.
       await postService.deletePost(parseInt(req.params.id));
       res.status(204).send();
     } catch (error) {
@@ -64,8 +70,7 @@ export const postController = {
     }
   },
 
-  // Rota protegida, usa AuthRequest
-  reactToPost: async (req: AuthRequest, res: Response) => {
+  reactToPost: async (req: Request, res: Response) => {
     const postId = parseInt(req.params.id);
     const userId = req.user?.id;
     const { type } = req.body;
@@ -83,8 +88,7 @@ export const postController = {
     }
   },
 
-  // Rota protegida, usa AuthRequest
-  removeReaction: async (req: AuthRequest, res: Response) => {
+  removeReaction: async (req: Request, res: Response) => {
     const postId = parseInt(req.params.id);
     const userId = req.user?.id;
 

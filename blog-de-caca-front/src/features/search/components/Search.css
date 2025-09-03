@@ -1,0 +1,10 @@
+.search-page-container { max-width: 900px; margin: 40px auto; padding: 20px; }
+.search-bar { display: flex; gap: 10px; margin-bottom: 30px; }
+.search-bar input { flex-grow: 1; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+.search-bar button { padding: 12px 20px; font-size: 1rem; }
+.user-card { display: flex; align-items: center; gap: 15px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; }
+.user-card-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+.user-card-info h4 { margin: 0 0 5px; }
+.user-card-info p { margin: 0; color: #777; }
+.pagination-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 30px; }
+.pagination-container button { padding: 8px 12px; }

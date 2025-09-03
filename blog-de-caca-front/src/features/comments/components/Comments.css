@@ -1,0 +1,116 @@
+.comments-section {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.comments-section h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.comment-wrapper {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.comment-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.comment-text {
+  margin-bottom: 10px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.reply-button {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.reply-button:hover {
+  text-decoration: underline;
+}
+
+.comment-replies {
+  margin-top: 20px;
+  padding-left: 25px;
+  border-left: 2px solid #f0f0f0;
+}
+
+.comments-section > .comment-form {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.reply-form-container {
+  margin-top: 15px;
+}
+
+.comment-form h4 {
+  margin-bottom: 10px;
+}
+
+.comment-form textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.comment-form button {
+  padding: 10px 20px;
+  background-color: #0d1b2a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.comment-form button:hover {
+  background-color: #1b263b;
+}
+
+.comment-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

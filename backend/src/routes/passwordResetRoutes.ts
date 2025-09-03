@@ -24,7 +24,7 @@ const router = Router();
  *       200:
  *         description: Se o e-mail existir, um link será enviado.
  */
-router.post('/password-reset/request', requestReset);
+router.post('/request', requestReset);
 
 /**
  * @swagger
@@ -52,6 +52,6 @@ router.post('/password-reset/request', requestReset);
  *       400:
  *         description: Token inválido ou expirado.
  */
-router.post('/password-reset/reset', resetPassword);
+router.post('/reset', resetPassword);
 
 export default router;

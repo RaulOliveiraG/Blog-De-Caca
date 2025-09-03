@@ -1,52 +1,118 @@
 import { Router } from 'express';
-import { registerUser, getAllUsers, deleteUser, updateUser } from '../controllers/userController';
-import { LoginUser } from '../controllers/LoginUser';
-import { validateUser } from '../middlewares/validateUser';
+import { getAllUsers, deleteUser, updateUser, search } from '../controllers/userController';
 import { onlyAdmin } from '../middlewares/authAdmin';
-import { validateLogin } from '../middlewares/validateLogin';
-import { LimitadorTentativasLogin } from '../middlewares/LoginRateLimiter';
-// Importamos o tipo AuthRequest do middleware
-import { authMiddleware, AuthRequest } from '../middlewares/authMiddleware';
-import { PrismaClient } from '@prisma/client';
+import { authMiddleware } from '../middlewares/authMiddleware';
 
-const prisma = new PrismaClient();
 const router = Router();
 
-// --- ROTAS DE AUTENTICAÇÃO E REGISTRO ---
-router.post('/registro', validateUser, registerUser);
-router.post('/login', LimitadorTentativasLogin, validateLogin, LoginUser);
+/**
+ * @swagger
+ * tags:
+ *   name: Usuários
+ *   description: Gerenciamento de usuários (requer privilégios de admin para a maioria das rotas)
+ */
 
-// --- ROTA DE PERFIL ---
-router.get('/profile', authMiddleware, async (req: AuthRequest, res) => {
-  // --- CORREÇÃO CRÍTICA ---
-  // Lemos o ID de 'req.user.id', que é o que nosso middleware padronizado fornece.
-  const userId = req.user?.id;
-
-  if (!userId) {
-    return res.status(401).json({ message: 'ID do usuário não encontrado no token.' });
-  }
-
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, nome: true, email: true },
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: 'Usuário não encontrado.' });
-    }
-
-    res.json(user);
-  } catch (error) {
-    console.error('Erro ao buscar perfil:', error);
-    res.status(500).json({ message: 'Erro interno do servidor.' });
-  }
-});
-
-// --- ROTAS DE GERENCIAMENTO DE USUÁRIOS ---
-// Note que o prefixo '/usuarios' deve ser definido no seu app.ts/index.ts (ex: app.use('/api/users', userRoutes))
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Retorna uma lista de todos os usuários
+ *     tags: [Usuários]
+ *     security: [{ bearerAuth: [] }]
+ *     responses:
+ *       200:
+ *         description: Lista de usuários.
+ *       401:
+ *         description: Não autorizado.
+ *       403:
+ *         description: Acesso negado (não é admin).
+ */
 router.get('/', authMiddleware, onlyAdmin, getAllUsers);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Deleta um usuário pelo ID
+ *     tags: [Usuários]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *         description: O ID do usuário a ser deletado.
+ *     responses:
+ *       204:
+ *         description: Usuário deletado com sucesso.
+ *       403:
+ *         description: Acesso negado.
+ *       404:
+ *         description: Usuário não encontrado.
+ */
 router.delete('/:id', authMiddleware, deleteUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Atualiza um usuário pelo ID
+ *     tags: [Usuários]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *         description: O ID do usuário a ser atualizado.
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nickname: { type: string }
+ *               nome: { type: string }
+ *               email: { type: string }
+ *     responses:
+ *       200:
+ *         description: Usuário atualizado com sucesso.
+ *       403:
+ *         description: Acesso negado.
+ *       404:
+ *         description: Usuário não encontrado.
+ */
 router.put("/:id", authMiddleware, updateUser);
+
+/**
+ * @swagger
+ * /users/search:
+ *   get:
+ *     summary: Busca usuários por nome ou nickname com paginação
+ *     tags: [Usuários]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         required: true
+ *         schema: { type: string }
+ *         description: O termo a ser buscado no nome ou nickname do usuário.
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer, default: 1 }
+ *         description: O número da página.
+ *       - in: query
+ *         name: limit
+ *         schema: { type: integer, default: 10 }
+ *         description: O número de resultados por página.
+ *     responses:
+ *       200:
+ *         description: Uma lista paginada de usuários.
+ *       400:
+ *         description: Termo de busca ausente.
+ *       401:
+ *         description: Não autorizado.
+ */
+router.get('/search', authMiddleware, search);
 
 export default router;

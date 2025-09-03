@@ -1,79 +1,61 @@
 import { Request, Response } from 'express';
-import * as userService from '../services/userService';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import * as userService from '../services/userService';
+import { LoginUser } from './LoginUser';
+import { registerUser } from './userController';
 
 export const authController = {
-  // --- FUNÇÃO DE REGISTRO CORRIGIDA ---
-  register: async (req: Request, res: Response) => {
-    try {
-      // 1. Cria o usuário no banco (seu código original)
-      const user = await userService.createUser(req.body);
+  // Funções movidas para cá
+  login: LoginUser,
+  register: registerUser,
 
-      // 2. GERA O TOKEN (A PARTE QUE FALTAVA)
-      const jwtSecret = process.env.ACCESS_TOKEN_SECRET;
-      if (!jwtSecret) {
-        // Log de erro no servidor, mas não exponha para o cliente
-        console.error("ERRO CRÍTICO: ACCESS_TOKEN_SECRET não está definido no .env");
-        return res.status(500).json({ message: 'Erro de configuração no servidor.' });
-      }
+  // Rota para obter dados do usuário logado
+  getMe: async (req: Request, res: Response) => {
+    const userId = req.user?.id;
 
-      const token = jwt.sign({ id: user.id, role: user.role }, jwtSecret, {
-        expiresIn: '1d', // Token válido por 1 dia
-      });
-
-      // 3. Retorna o token para o cliente
-      // Omitimos a senha do objeto de usuário retornado
-      const { senha: _, ...userWithoutPassword } = user;
-      return res.status(201).json({ user: userWithoutPassword, token });
-
-    } catch (error: any) {
-      // Trata erro de email duplicado
-      if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
-        return res.status(409).json({ message: 'Este email já está em uso.' });
-      }
-      return res.status(400).json({ message: error.message });
-    }
-  },
-
-  // --- FUNÇÃO DE LOGIN (ESSENCIAL) ---
-  login: async (req: Request, res: Response) => {
-    const { email, senha } = req.body;
-
-    if (!email || !senha) {
-      return res.status(400).json({ message: 'Email e senha são obrigatórios.' });
+    if (!userId) {
+      return res.status(401).json({ message: 'Não autenticado.' });
     }
 
     try {
-      // 1. Encontra o usuário pelo email
-      const user = await userService.findUserByEmail(email);
+      const user = await userService.findUserById(userId);
       if (!user) {
         return res.status(404).json({ message: 'Usuário não encontrado.' });
       }
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).json({ message: 'Erro interno do servidor.' });
+    }
+  },
 
-      // 2. Compara a senha enviada com a senha hasheada no banco
-      const isPasswordValid = await bcrypt.compare(senha, user.senha);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Credenciais inválidas.' });
+  // Rota para renovar o access token
+  refreshToken: (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'Refresh token não encontrado.' });
+    }
+
+    try {
+      // Verifica se as chaves secretas estão definidas no ambiente
+      if (!process.env.REFRESH_TOKEN_SECRET || !process.env.ACCESS_TOKEN_SECRET) {
+        throw new Error('As chaves secretas de token não estão definidas.');
       }
 
-      // 3. GERA O TOKEN (A mesma lógica do registro)
-      const jwtSecret = process.env.ACCESS_TOKEN_SECRET;
-      if (!jwtSecret) {
-        console.error("ERRO CRÍTICO: ACCESS_TOKEN_SECRET não está definido no .env");
-        return res.status(500).json({ message: 'Erro de configuração no servidor.' });
-      }
+      // Valida o refresh token
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET) as { id: number };
 
-      const token = jwt.sign({ id: user.id, role: user.role }, jwtSecret, {
-        expiresIn: '1d',
+      // Gera um novo access token
+      const payload = { id: decoded.id };
+      const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '15m',
       });
 
-      // 4. Retorna o token para o cliente
-      const { senha: _, ...userWithoutPassword } = user;
-      return res.status(200).json({ user: userWithoutPassword, token });
+      return res.status(200).json({ accessToken: newAccessToken });
 
-    } catch (error: any) {
-      return res.status(500).json({ message: 'Erro interno do servidor.' });
+    } catch (error) {
+      // Se o token for inválido ou expirado, jwt.verify lança um erro
+      return res.status(403).json({ message: 'Refresh token inválido ou expirado.' });
     }
   },
 };

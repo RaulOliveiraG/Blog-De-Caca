@@ -1,0 +1,48 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background-color: #0d1b2a;
+  color: white;
+}
+
+.header-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.header-nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-actions button,
+.header-actions .btn-link {
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.header-actions .btn-signup {
+  background-color: white;
+  color: #0d1b2a;
+}
+
+.header-user-info {
+  color: #ccc;
+}

@@ -1,33 +1,25 @@
-/* --- ARQUIVO NOVO: src/pages/UserProfile.css --- */
-
-/* Importa a fonte, caso não esteja globalmente definida */
 @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap');
 
-/* Container principal da página de perfil */
 .profile-page-container {
-  background-color: #f4f4f4; /* Mesmo fundo da HomePage */
+  background-color: #f4f4f4; 
   color: #333;
   font-family: 'Segoe UI', sans-serif;
-  min-height: 100vh; /* Garante que o fundo ocupe a tela toda */
+  min-height: 100vh; 
 }
 
-/* O cabeçalho .home-header já é estilizado pelo CSS global ou da HomePage, então não precisamos redefini-lo */
-
-/* Conteúdo principal abaixo do header */
 .profile-main-content {
-  padding: 40px 5%; /* Espaçamento padrão das seções */
+  padding: 40px 5%; 
 }
 
-/* Card de informações do usuário */
 .profile-info-card {
-  background-color: #0d1b2a; /* Cor de destaque do header */
+  background-color: #0d1b2a; 
   color: white;
   padding: 30px;
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 50px; /* Espaço antes da seção de posts */
+  margin-bottom: 50px; 
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -39,10 +31,9 @@
 .profile-details p {
   margin: 0;
   font-size: 1.1rem;
-  color: #ccc; /* Cor mais suave para o email */
+  color: #ccc; 
 }
 
-/* Botão de Criar Post */
 .btn-create-post {
   background-color: white;
   color: #0d1b2a;
@@ -60,29 +51,25 @@
   transform: translateY(-2px);
 }
 
-/* Seção "Meus Posts" */
 .my-posts-section h2 {
   font-size: 2rem;
   margin-bottom: 30px;
-  border-bottom: 2px solid #ccc; /* Mesmo estilo de título da HomePage */
+  border-bottom: 2px solid #ccc;
   padding-bottom: 10px;
   color: #333;
 }
 
-/* Grid de Posts - Reutilizando o estilo da HomePage para consistência */
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 30px;
 }
 
-/* Estilo para o caso de não haver posts */
 .posts-grid p {
   color: #777;
   font-style: italic;
 }
 
-/* Card de Post - Exatamente como na HomePage */
 .post-card {
   background: white;
   display: flex;
@@ -106,7 +93,7 @@
 
 .post-content {
   padding: 20px;
-  flex-grow: 1; /* Garante que o conteúdo ocupe o espaço */
+  flex-grow: 1; 
 }
 
 .post-content h4 {
@@ -133,3 +120,6 @@
 .arrow-link:hover {
   background-color: #1b2f45;
 }
+
+.post-actions { margin-top: 10px; display: flex; gap: 10px; }
+.post-actions button { padding: 5px 10px; cursor: pointer; }

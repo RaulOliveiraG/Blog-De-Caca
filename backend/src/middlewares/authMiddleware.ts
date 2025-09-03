@@ -1,47 +1,46 @@
+// --- ARQUIVO: backend/src/middlewares/authMiddleware.ts ---
+
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import prisma from '../config/database';
 
-// Definindo o tipo do payload que esperamos do token
-interface UserPayload {
-  id: number;
-  role: string;
-}
-
-// Estendendo a interface Request do Express para que o TypeScript
-// reconheça nossa nova propriedade 'user'.
-export interface AuthRequest extends Request {
-  user?: UserPayload; // A propriedade agora é 'user' e é opcional
-}
-
-export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  console.log(`[Auth Middleware] Verificando rota: ${req.method} ${req.path}`);
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    console.error('[Auth Middleware] Falha: Header de autorização ausente ou mal formatado.');
     return res.status(401).json({ message: 'Acesso negado. Token não fornecido ou mal formatado.' });
   }
 
   const token = authHeader.split(' ')[1];
+  console.log(`[Auth Middleware] Token recebido: ${token}`);
 
   try {
-    const jwtSecret = process.env.ACCESS_TOKEN_SECRET;
-    if (!jwtSecret) {
-      console.error("ERRO CRÍTICO: ACCESS_TOKEN_SECRET não está definido no .env");
-      return res.status(500).json({ message: 'Erro de configuração no servidor.' });
+    if (!process.env.ACCESS_TOKEN_SECRET) {
+      console.error('[Auth Middleware] Falha Crítica: ACCESS_TOKEN_SECRET não está definido no .env');
+      throw new Error('A chave secreta do token (ACCESS_TOKEN_SECRET) não está definida.');
     }
 
-    // --- CORREÇÃO CRÍTICA ---
-    // Decodificamos o token e o anexamos a 'req.user', que é a convenção.
-    const decoded = jwt.verify(token, jwtSecret) as UserPayload;
-    req.user = decoded; // Agora 'req.user' contém { id: 6, role: 'user' }
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as { id: number };
+    console.log(`[Auth Middleware] Token decodificado com sucesso para o user ID: ${decoded.id}`);
+    
+    const user = await prisma.user.findUnique({ 
+      where: { id: decoded.id },
+      select: { id: true, role: true }
+    });
+
+    if (!user) {
+      console.error(`[Auth Middleware] Falha: Usuário com ID ${decoded.id} não encontrado no banco de dados.`);
+      return res.status(401).json({ message: 'Usuário associado ao token não encontrado.' });
+    }
+
+    console.log(`[Auth Middleware] Sucesso: Usuário ${user.id} (${user.role}) autenticado.`);
+    req.user = { id: user.id, role: user.role };
     
     next();
-  } catch (error) {
-    if (error instanceof TokenExpiredError) {
-      return res.status(401).json({ message: 'Token expirado. Por favor, faça login novamente.' });
-    }
-    if (error instanceof JsonWebTokenError) {
-      return res.status(401).json({ message: 'Token inválido.' });
-    }
-    return res.status(401).json({ message: 'Falha na autenticação.' });
+  } catch (error: any) {
+    console.error('[Auth Middleware] Falha na verificação do token:', error.message);
+    return res.status(401).json({ message: 'Token inválido ou expirado.', error: error.message });
   }
 };

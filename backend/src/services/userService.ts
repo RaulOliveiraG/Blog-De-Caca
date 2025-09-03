@@ -1,6 +1,5 @@
 import prisma from '../config/database';
 import bcrypt from 'bcrypt';
-import { User } from '@prisma/client';
 
 interface CreateUserDTO {
   nickname: string;
@@ -12,8 +11,7 @@ interface CreateUserDTO {
   foto_perfil?: string;
 }
 
-// A função agora promete retornar um objeto do tipo 'User' completo.
-export async function createUser(data: CreateUserDTO): Promise<User> {
+export async function createUser(data: CreateUserDTO) {
   // Verifica se email já existe
   const existingEmail = await prisma.user.findUnique({
     where: { email: data.email }
@@ -41,7 +39,7 @@ export async function createUser(data: CreateUserDTO): Promise<User> {
   const usuario = await prisma.user.create({
     data: {
       nickname: data.nickname,
-      senha_hash, // O nome do campo no schema do Prisma
+      senha_hash,
       cpf: data.cpf,
       nome: data.nome,
       email: data.email,
@@ -50,7 +48,9 @@ export async function createUser(data: CreateUserDTO): Promise<User> {
       role: userCount === 0 ? 'admin' : 'user'
     }
   });
-  return usuario;
+  
+  const { senha_hash: _, ...userWithoutPassword } = usuario;
+  return userWithoutPassword;
 }
 
 export async function getAllUsersService() {
@@ -75,6 +75,7 @@ export async function deleteUserById(id: number) {
   });
 }
 
+
 export async function updateUserById(id: number, data: any) {
   if (data.senha) {
     data.senha_hash = await bcrypt.hash(data.senha, 12);
@@ -95,4 +96,58 @@ export async function updateUserById(id: number, data: any) {
       role: true,
     },
   });
+}
+
+export async function findUserById(id: number) {
+  return prisma.user.findUnique({
+    where: { id },
+    select: { 
+      id: true,
+      nickname: true,
+      nome: true,
+      email: true,
+      foto_perfil: true,
+      role: true,
+    },
+  });
+}
+
+interface SearchUsersParams {
+  query: string;
+  page: number;
+  limit: number;
+}
+
+export async function searchUsers({ query, page, limit }: SearchUsersParams) {
+  const skip = (page - 1) * limit;
+
+  const whereClause = {
+    OR: [
+      { nome: { contains: query, mode: 'insensitive' as const } },
+      { nickname: { contains: query, mode: 'insensitive' as const } },
+    ],
+  };
+
+  const [users, total] = await prisma.$transaction([
+    prisma.user.findMany({
+      where: whereClause,
+      select: {
+        id: true,
+        nickname: true,
+        nome: true,
+        foto_perfil: true,
+        data_cadastro: true,
+      },
+      skip: skip,
+      take: limit,
+    }),
+    prisma.user.count({ where: whereClause }),
+  ]);
+
+  return {
+    data: users,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+  };
 }
